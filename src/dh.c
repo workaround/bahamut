@@ -275,8 +275,10 @@ char *dh_get_s_public(char *buf, int maxlen, void *session)
     if(!si || !si->dh)
 	    return NULL;
 
-    const BIGNUM* pubkey = DH_get0_pub_key(si->dh);
-    if (!pubkey)
+    const BIGNUM* pubkey;
+    const BIGNUM* privkey;
+    DH_get0_key(si->dh, &pubkey, &privkey);
+    if (!pubkey || !privkey)
         return NULL;
 
     tmp = BN_bn2hex(pubkey);
